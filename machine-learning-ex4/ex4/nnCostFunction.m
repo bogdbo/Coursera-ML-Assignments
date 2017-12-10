@@ -91,8 +91,17 @@ secondSum = (1 - xY)' * (log(1 - A2));
 J = -1/m * trace(firstSum + secondSum); % use trace to exclude unnecessary 
                                         % terms from multiplication
 
+regularizedTheta1 = Theta1;
+regularizedTheta2 = Theta2;
+
+regularizedTheta1(:,1) = 0;
+regularizedTheta2(:,1) = 0;
+regularizationTerm = sum(sum(regularizedTheta1.^2)) + sum(sum(regularizedTheta2.^2));
+
+J = J + lambda/(2*m) * regularizationTerm;
 
 % Compute gradients
+
 
 
 
