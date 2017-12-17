@@ -90,6 +90,7 @@ firstSum = xY' * log(A2);
 secondSum = (1 - xY)' * (log(1 - A2));
 J = -1/m * trace(firstSum + secondSum); % use trace to exclude unnecessary 
                                         % terms from multiplication
+                                        % take only main diagonal
 
 regularizedTheta1 = Theta1;
 regularizedTheta2 = Theta2;
@@ -101,9 +102,23 @@ regularizationTerm = sum(sum(regularizedTheta1.^2)) + sum(sum(regularizedTheta2.
 J = J + lambda/(2*m) * regularizationTerm;
 
 % Compute gradients
+error3 = A2 - xY; % diference between extended labels [0 0 0 1 ...] - [1 0 0 0...]
+error2 = error3 * Theta2 .* A1 .* (1 - A1); % Theta2' * delta3 * g'(z2) 
+                                            % https://www.coursera.org/learn/machine-learning/resources/EcbzQ
+error1 = error2(:,[2:end]) * Theta1 .* X .* (1 - X);
+
+delta1 = error1' * X;
+delta2 = error2' * A1;
+delta3 = error3' * A2;
+
+% Partial derivatives D, computed 'inplace' instead of in new variable D(l,i,j)
+delta1(:,1) = 1/m .* delta1(:,1); 
+delta1(:, [2: end]) = 1/m .* (delta1(:, [2: end]) + lambda * Theta1);
 
 
-
+for t = [1:m]
+  %error3(t) = A3(t) - 
+end
 
 
 % -------------------------------------------------------------
