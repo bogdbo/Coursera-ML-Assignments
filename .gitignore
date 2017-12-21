@@ -1,2 +1,3 @@
 *.zip
 **/token.mat
+*.stackdump
